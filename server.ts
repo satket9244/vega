@@ -26,15 +26,15 @@ async function startServer() {
     try {
       const { people, dietary, avoid, portability, desserts } = req.body;
       
-      const prompt = `Generate a weekly vegetarian meal plan (7 days, 3 meals per day: Breakfast, Lunch, Dinner).
-      Constraints:
-      - People: ${people}
-      - Dietary: ${dietary.join(", ")}
-      - Ingredients to avoid: ${avoid.join(", ")}
-      - Portability: ${portability ? "Focus on packable lunches (easy to transport)" : "Standard meals"}
-      - Include Desserts: ${desserts ? "Add one sweet treat per day" : "No desserts"}
+      const prompt = `Hozzon létre egy heti vegetáriánus étkezési tervet (7 nap, napi 3 étkezés: Reggeli, Ebéd, Vacsora) MAGYAR NYELVEN.
+      Paraméterek:
+      - Személyek: ${people}
+      - Étrend: ${dietary.join(", ")}
+      - Kerülendő összetevők: ${avoid.join(", ")}
+      - Szállíthatóság: ${portability ? "Fókuszáljon a csomagolható ebédekre (könnyen szállítható)" : "Általános ételek"}
+      - Desszertek: ${desserts ? "Adjon hozzá napi egy édességet" : "Nincs desszert"}
       
-      Return the response in JSON format.`;
+      A választ JSON formátumban adja meg.`;
 
       const result = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
@@ -135,7 +135,7 @@ async function startServer() {
         },
         contents: {
           parts: [
-            { text: "Identify the individual vegetarian food items and ingredients inside this refrigerator. Categorize them and provide a confidence score." },
+            { text: "Azonosítsa be az egyes vegetáriánus élelmiszereket és összetevőket a hűtőszekrényben. Kategorizálja őket (Greens, Veggie, Dairy, Pantry, Protein) és adjon meg egy megbízhatósági pontszámot. A neveket magyarul adja meg." },
             { inlineData: { data: image.split(",")[1], mimeType: "image/jpeg" } }
           ]
         }

@@ -7,82 +7,82 @@ import { Recipe } from "../types";
 export const SAMPLE_RECIPES: Recipe[] = [
   {
     id: "avocado-bowl",
-    name: "Avocado Buddha Bowl",
-    description: "A lush and vibrant Buddha bowl filled with fresh avocado slices, roasted sweet potatoes, kale, chickpeas, and quinoa.",
+    name: "Avokádó Buddha Tál",
+    description: "Egy buja és vibráló Buddha-tál, tele friss avokádószeletekkel, sült édesburgonyával, kelkáposztával, csicseriborsóval és quinoával.",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070&auto=format&fit=crop",
-    time: "15 min",
+    time: "15 perc",
     calories: 340,
     difficulty: "Easy",
-    category: "Lunch",
+    category: "Ebéd",
     nutrients: { protein: "12g", carbs: "42g", fat: "14g" },
     ingredients: [
-      { item: "Avocado", amount: "1/2 unit" },
-      { item: "Kale", amount: "1 cup" },
-      { item: "Roasted Sweet Potato", amount: "150g" },
-      { item: "Chickpeas", amount: "100g" },
-      { item: "Quinoa", amount: "1/2 cup" }
+      { item: "Avokádó", amount: "1/2 darab" },
+      { item: "Kelkáposzta", amount: "1 csésze" },
+      { item: "Sült édesburgonya", amount: "150g" },
+      { item: "Csicseriborsó", amount: "100g" },
+      { item: "Quinoa", amount: "1/2 csésze" }
     ],
     instructions: [
-      "Massage kale with a bit of olive oil.",
-      "Assemble all ingredients in a bowl.",
-      "Drizzle with tahini dressing."
+      "Masszírozzuk át a kelkáposztát egy kevés olívaolajjal.",
+      "Állítsuk össze az összes hozzávalót egy tálba.",
+      "Locsoljuk meg tahini öntettel."
     ]
   },
   {
     id: "spinach-pasta",
-    name: "Creamy Spinach Pasta",
-    description: "A close-up shot of creamy spinach pasta garnished with freshly grated parmesan and black pepper.",
+    name: "Krémes spenótos tészta",
+    description: "Közeli felvétel krémes spenótos tésztáról, frissen reszelt parmezánnal és fekete borssal díszítve.",
     image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=2080&auto=format&fit=crop",
-    time: "20 min",
+    time: "20 perc",
     calories: 450,
     difficulty: "Medium",
-    category: "Dinner",
+    category: "Vacsora",
     nutrients: { protein: "15g", carbs: "60g", fat: "18g" },
     ingredients: [
-      { item: "Spaghetti", amount: "200g" },
-      { item: "Baby Spinach", amount: "200g" },
-      { item: "Garlic", amount: "2 cloves" },
-      { item: "Cream", amount: "100ml" },
-      { item: "Parmesan", amount: "30g" }
+      { item: "Spagetti", amount: "200g" },
+      { item: "Bébispenót", amount: "200g" },
+      { item: "Fokhagyma", amount: "2 gerezd" },
+      { item: "Tejszín", amount: "100ml" },
+      { item: "Parmezán", amount: "30g" }
     ],
     instructions: [
-      "Boil spaghetti until al dente.",
-      "Sauté garlic and spinach until wilted.",
-      "Add cream and parmesan, then mix with pasta."
+      "Főzzük ki a spagettit al dente állagúra.",
+      "Pároljuk meg a fokhagymát és a spenótot, amíg összeesik.",
+      "Adjuk hozzá a tejszínt és a parmezánt, majd keverjük össze a tésztával."
     ]
   },
   {
     id: "feta-salad",
-    name: "Garden Feta Salad",
-    description: "A vibrant Mediterranean salad featuring cherry tomatoes, cucumbers, olives, and cubes of fresh feta.",
+    name: "Kerti feta saláta",
+    description: "Vibráló mediterrán saláta koktélparadicsommal, uborkával, olajbogyóval és friss feta sajtkockákkal.",
     image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1974&auto=format&fit=crop",
-    time: "10 min",
+    time: "10 perc",
     calories: 280,
     difficulty: "Easy",
-    category: "Lunch",
+    category: "Ebéd",
     nutrients: { protein: "8g", carbs: "12g", fat: "22g" },
     ingredients: [
-      { item: "Cucumber", amount: "1 unit" },
-      { item: "Cherry Tomatoes", amount: "150g" },
-      { item: "Feta Cheese", amount: "100g" },
-      { item: "Olives", amount: "50g" }
+      { item: "Uborka", amount: "1 darab" },
+      { item: "Koktélparadicsom", amount: "150g" },
+      { item: "Feta sajt", amount: "100g" },
+      { item: "Olajbogyó", amount: "50g" }
     ],
     instructions: [
-      "Dice cucumber and halve tomatoes.",
-      "Combine in a bowl with olives.",
-      "Top with crumbled feta and olive oil."
+      "Kockázzuk fel az uborkát és felezzük el a paradicsomokat.",
+      "Keverjük össze egy tálban az olajbogyóval.",
+      "Szórjuk meg morzsolt fetával és locsoljuk meg olívaolajjal."
     ]
   }
 ];
 
-const CATEGORIES = ["All", "Breakfast", "Lunch", "Dinner", "Vegan", "High Protein"];
+const CATEGORIES = ["Összes", "Reggeli", "Ebéd", "Vacsora", "Vegán", "Magas fehérje"];
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Összes");
   const [search, setSearch] = useState("");
 
   const filteredRecipes = SAMPLE_RECIPES.filter(r => 
-    (selectedCategory === "All" || r.category === selectedCategory) &&
+    (selectedCategory === "Összes" || r.category === selectedCategory) &&
     r.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -128,8 +128,8 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-900/30 to-transparent flex flex-col justify-end p-10">
             <div className="space-y-3">
-              <span className="bg-green-500 text-white text-[9px] font-black px-5 py-1.5 rounded-full uppercase tracking-[0.25em]">Chef's Choice</span>
-              <h2 className="text-4xl font-black text-white leading-tight filter drop-shadow-lg">Avocado Buddha Bowl</h2>
+              <span className="bg-green-500 text-white text-[9px] font-black px-5 py-1.5 rounded-full uppercase tracking-[0.25em]">Séf ajánlata</span>
+              <h2 className="text-4xl font-black text-white leading-tight filter drop-shadow-lg">Avokádó Buddha Tál</h2>
               <div className="flex items-center gap-6 text-white/90 text-xs font-bold uppercase tracking-widest">
                 <span className="flex items-center gap-2"><Clock size={16} /> 15 perc</span>
                 <span className="flex items-center gap-2 text-orange-400"><Flame size={16} /> 340 kcal</span>
@@ -167,7 +167,9 @@ export default function Home() {
                   <div className="flex flex-wrap gap-4 text-green-700/60 font-bold text-[10px] uppercase tracking-widest pt-4 border-t border-green-50">
                     <span className="flex items-center gap-1.5"><Clock size={14} /> {recipe.time}</span>
                     <span className="flex items-center gap-1.5 text-orange-500/70"><Flame size={14} /> {recipe.calories} kcal</span>
-                    <span className="ml-auto px-2 py-0.5 bg-green-50 rounded italic font-medium lowercase">{recipe.difficulty}</span>
+                    <span className="ml-auto px-2 py-0.5 bg-green-50 rounded italic font-medium lowercase">
+                      {recipe.difficulty === 'Easy' ? 'Könnyű' : recipe.difficulty === 'Medium' ? 'Közepes' : 'Nehéz'}
+                    </span>
                   </div>
                 </div>
               </motion.div>

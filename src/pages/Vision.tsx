@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Camera, Zap, Image as ImageIcon, Sparkles, Plus, History, Edit3 } from "lucide-react";
+import { Camera, Zap, Image as ImageIcon, Sparkles, Plus, History, Edit3, RefreshCw } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function Vision() {
@@ -53,7 +53,7 @@ export default function Vision() {
   return (
     <div className="px-5 pt-10 pb-40 space-y-12 max-w-6xl mx-auto">
       <header className="space-y-2 border-b border-green-100 pb-6">
-        <h2 className="text-4xl font-black text-green-900 tracking-tight">AI Fridge Vision</h2>
+        <h2 className="text-4xl font-black text-green-900 tracking-tight">AI Vision - Hűtő Elemzés</h2>
         <div className="flex items-center gap-3">
           <div className="px-3 py-1 bg-green-500/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest border border-primary/20">Aktív elemzés</div>
           <p className="text-sm font-bold text-green-600/70">Készíts fotót a hűtődről, és az AI receptet javasol!</p>
@@ -133,7 +133,7 @@ export default function Vision() {
                     <Sparkles size={24} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-green-400 uppercase tracking-widest">{ing.category}</p>
+                    <p className="text-[10px] font-black text-green-400 uppercase tracking-widest">{ing.category === 'Greens' ? 'Zöldek' : ing.category === 'Veggie' ? 'Zöldség' : ing.category === 'Dairy' ? 'Tejtermék' : ing.category === 'Pantry' ? 'Kamra' : 'Fehérje'}</p>
                     <p className="text-lg font-black text-green-900 truncate w-32">{ing.name}</p>
                   </div>
                 </motion.div>

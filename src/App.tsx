@@ -22,19 +22,19 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   const navItems = [
-    { name: "Dashboard", path: "/", icon: HomeIcon },
-    { name: "Planner", path: "/planner", icon: CalendarDays },
+    { name: "Főoldal", path: "/", icon: HomeIcon },
+    { name: "Tervező", path: "/planner", icon: CalendarDays },
     { name: "Vision", path: "/vision", icon: Camera },
-    { name: "Shopping", path: "/shopping", icon: ShoppingCart },
-    { name: "Favorites", path: "/favorites", icon: Heart },
+    { name: "Kosár", path: "/shopping", icon: ShoppingCart },
+    { name: "Kedvencek", path: "/favorites", icon: Heart },
   ];
 
   return (
     <div className="min-h-screen bg-background pb-24 flex flex-col max-w-7xl mx-auto">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md h-16 flex justify-between items-center px-8 border-b border-green-100 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary font-black text-xl shadow-lg">V</div>
-          <h1 className="text-2xl font-black tracking-tight text-primary">VeggiePlan <span className="text-green-500 font-normal underline decoration-green-200 decoration-4">Organic</span></h1>
+          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary font-black text-xl shadow-lg">Z</div>
+          <h1 className="text-2xl font-black tracking-tight text-primary">ZöldReceptek <span className="text-green-500 font-normal underline decoration-green-200 decoration-4">Organic</span></h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="p-2 text-primary hover:bg-green-50 rounded-xl transition-all">
@@ -104,7 +104,7 @@ export default function App() {
           <Route path="/vision" element={<Vision />} />
           <Route path="/shopping" element={<ShoppingList />} />
           <Route path="/recipe/:id" element={<RecipeDetail />} />
-          <Route path="/favorites" element={<div className="p-10 text-center text-outline">Your favorite recipes will appear here.</div>} />
+          <Route path="/favorites" element={<div className="p-10 text-center text-outline">A kedvenc receptjeid itt fognak megjelenni.</div>} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

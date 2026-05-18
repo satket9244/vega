@@ -1,5 +1,5 @@
 {
-  "name": "VeggiePlan",
+  "name": "ZöldReceptek",
   "description": "Organic vegeterian meal planner with AI Vision fridge recognition and smart shopping lists.",
   "requestFramePermissions": ["camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

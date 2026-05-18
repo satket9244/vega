@@ -8,7 +8,7 @@ export default function RecipeDetail() {
   const navigate = useNavigate();
   const recipe = SAMPLE_RECIPES.find(r => r.id === id);
 
-  if (!recipe) return <div className="p-10 text-center">Recipe not found</div>;
+  if (!recipe) return <div className="p-10 text-center font-black text-green-900">A recept nem található</div>;
 
   return (
     <div className="bg-background min-h-screen">
@@ -25,7 +25,7 @@ export default function RecipeDetail() {
         <div className="absolute bottom-0 left-0 w-full p-10 max-w-7xl mx-auto">
           <div className="flex gap-2 mb-4">
             <span className="tag-green bg-green-500 text-white">{recipe.category}</span>
-            <span className="tag-green">Vegetarian</span>
+            <span className="tag-green">Vegetáriánus</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-white mb-6 filter drop-shadow-xl">{recipe.name}</h1>
           <div className="flex flex-wrap gap-8 text-white/90 text-sm font-black uppercase tracking-[0.2em]">

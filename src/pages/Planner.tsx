@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Users, Sparkles, RefreshCw, ChevronRight, Check, X, Clock, Flame } from "lucide-react";
+import { Users, Sparkles, RefreshCw, ChevronRight, Check, X, Clock, Flame, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { MealPlan } from "../types";
 
 export default function Planner() {
   const [people, setPeople] = useState(2);
-  const [dietary, setDietary] = useState<string[]>(["Vegan"]);
-  const [avoid, setAvoid] = useState<string[]>(["Mushrooms"]);
+  const [dietary, setDietary] = useState<string[]>(["Vegán"]);
+  const [avoid, setAvoid] = useState<string[]>(["Gomba"]);
   const [avoidInput, setAvoidInput] = useState("");
   const [portability, setPortability] = useState(false);
   const [desserts, setDesserts] = useState(false);
@@ -69,7 +69,7 @@ export default function Planner() {
           <div className="space-y-4">
             <label className="text-[10px] font-black text-green-600 uppercase tracking-[0.25em]">Étrend</label>
             <div className="flex flex-wrap gap-4">
-              {["Vegan", "Gluten-free"].map(pref => (
+              {["Vegán", "Gluténmentes", "Laktózmentes"].map(pref => (
                 <button
                   key={pref}
                   onClick={() => toggleDietary(pref)}
@@ -175,12 +175,14 @@ export default function Planner() {
                     >
                       <div className="relative h-40 bg-green-50 overflow-hidden flex items-center justify-center">
                         <div className="absolute top-4 left-4 px-4 py-1.5 bg-primary text-white rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 z-10">
-                          {type}
+                          {type === 'breakfast' ? 'Reggeli' : type === 'lunch' ? 'Ebéd' : type === 'dinner' ? 'Vacsora' : 'Desszert'}
                         </div>
                         <button className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-md rounded-xl text-primary shadow-xl hover:bg-primary hover:text-white transition-all transform active:scale-90 z-10">
                           <RefreshCw size={18} />
                         </button>
-                        <div className="text-primary/10 font-black uppercase tracking-[0.3em] text-2xl select-none">{type}</div>
+                        <div className="text-primary/10 font-black uppercase tracking-[0.3em] text-2xl select-none">
+                          {type === 'breakfast' ? 'Reggeli' : type === 'lunch' ? 'Ebéd' : type === 'dinner' ? 'Vacsora' : 'Desszert'}
+                        </div>
                       </div>
                       <div className="p-6 space-y-4 flex-1 flex flex-col">
                         <h4 className="text-lg font-black leading-tight text-green-900 group-hover/card:text-primary transition-colors flex-1">{meal.name}</h4>
