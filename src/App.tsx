@@ -1,21 +1,56 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
-import { Home as HomeIcon, CalendarDays, ShoppingCart, Heart, Settings, Camera } from "lucide-react";
+import { Home as HomeIcon, CalendarDays, ShoppingCart, Heart, ShieldCheck, Camera, User as UserIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Home from "./pages/Home";
 import Planner from "./pages/Planner";
 import ShoppingList from "./pages/ShoppingList";
 import Vision from "./pages/Vision";
 import RecipeDetail from "./pages/RecipeDetail";
+import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { signInWithGoogle } from "./lib/firebase";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+function Header() {
+  const { user, profile } = useAuth();
+  
+  return (
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md h-16 flex justify-between items-center px-8 border-b border-green-100 shadow-sm">
+      <Link to="/" className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary font-black text-xl shadow-lg">Z</div>
+        <h1 className="text-2xl font-black tracking-tight text-primary">ZöldReceptek <span className="text-green-500 font-normal italic">Organic</span></h1>
+      </Link>
+      <div className="flex items-center gap-4">
+        {profile?.isAdmin && (
+          <Link to="/admin" className="p-2.5 text-primary hover:bg-green-50 rounded-xl transition-all" title="Admin">
+            <ShieldCheck size={24} />
+          </Link>
+        )}
+        {user ? (
+          <Link to="/profile" className="flex items-center gap-2 p-1.5 pr-4 bg-green-50 rounded-2xl hover:bg-green-100 transition-all border border-green-100 group">
+            <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-primary overflow-hidden shadow-sm">
+              {user.photoURL ? <img src={user.photoURL} alt="Avatar" className="w-full h-full object-cover" /> : <UserIcon size={18} />}
+            </div>
+            <span className="text-xs font-black text-green-800 uppercase tracking-widest hidden md:block">Profil</span>
+          </Link>
+        ) : (
+          <button 
+            onClick={signInWithGoogle}
+            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+          >
+            <UserIcon size={16} />
+            BELÉPÉS
+          </button>
+        )}
+      </div>
+    </header>
+  );
 }
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -31,17 +66,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background pb-24 flex flex-col max-w-7xl mx-auto">
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md h-16 flex justify-between items-center px-8 border-b border-green-100 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary font-black text-xl shadow-lg">Z</div>
-          <h1 className="text-2xl font-black tracking-tight text-primary">ZöldReceptek <span className="text-green-500 font-normal underline decoration-green-200 decoration-4">Organic</span></h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 text-primary hover:bg-green-50 rounded-xl transition-all">
-            <Settings size={22} />
-          </button>
-        </div>
-      </header>
+      <Header />
 
       <main className="flex-1 w-full max-w-7xl mx-auto pt-6 px-4">
         <AnimatePresence mode="wait">
@@ -96,17 +121,21 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <MainLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/planner" element={<Planner />} />
-          <Route path="/vision" element={<Vision />} />
-          <Route path="/shopping" element={<ShoppingList />} />
-          <Route path="/recipe/:id" element={<RecipeDetail />} />
-          <Route path="/favorites" element={<div className="p-10 text-center text-outline">A kedvenc receptjeid itt fognak megjelenni.</div>} />
-        </Routes>
-      </MainLayout>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/planner" element={<Planner />} />
+            <Route path="/vision" element={<Vision />} />
+            <Route path="/shopping" element={<ShoppingList />} />
+            <Route path="/recipe/:id" element={<RecipeDetail />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/favorites" element={<div className="p-10 text-center text-outline">A kedvenc receptjeid itt fognak megjelenni.</div>} />
+          </Routes>
+        </MainLayout>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

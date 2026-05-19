@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Users, Sparkles, RefreshCw, ChevronRight, Check, X, Clock, Flame, Plus } from "lucide-react";
+import { Users, Sparkles, RefreshCw, ChevronRight, Check, X, Clock, Flame, Plus, Lock, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { MealPlan } from "../types";
+import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Planner() {
+  const { profile, incrementPlannerCount } = useAuth();
   const [people, setPeople] = useState(2);
   const [dietary, setDietary] = useState<string[]>(["Vegán"]);
   const [avoid, setAvoid] = useState<string[]>(["Gomba"]);
@@ -12,8 +15,17 @@ export default function Planner() {
   const [desserts, setDesserts] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [plan, setPlan] = useState<MealPlan | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const generatePlan = async () => {
+    if (!profile) return;
+    
+    // Limits check
+    if (profile.plannerUseCount >= 3 && !profile.isSubscribed && !profile.isAdmin) {
+      setShowPaywall(true);
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const res = await fetch("/api/planner", {
@@ -23,6 +35,10 @@ export default function Planner() {
       });
       const data = await res.json();
       setPlan(data);
+      // Increment only if not admin
+      if (!profile.isAdmin) {
+        await incrementPlannerCount();
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -199,6 +215,67 @@ export default function Planner() {
           </div>
         </section>
       )}
+
+      {/* Paywall Modal */}
+      <AnimatePresence>
+        {showPaywall && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-green-900/40 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="bg-white rounded-[40px] p-10 max-w-lg w-full shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -mr-16 -mt-16" />
+              <button 
+                onClick={() => setShowPaywall(false)}
+                className="absolute top-6 right-6 p-2 text-green-300 hover:text-red-500 transition-colors"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="space-y-8 text-center relative z-10">
+                <div className="w-20 h-20 bg-primary/10 text-primary rounded-3xl mx-auto flex items-center justify-center">
+                  <Lock size={40} />
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-4xl font-black text-green-900 tracking-tight">Limit Elérve</h3>
+                  <p className="text-green-600 font-bold">Az ingyenes 3 alkalmas tervezésed elfogyott. Folytasd a Pro verzióval!</p>
+                </div>
+
+                <div className="bg-green-50 rounded-[32px] p-8 space-y-4 border border-green-100">
+                  <div className="flex items-center justify-between">
+                    <span className="text-green-800 font-black uppercase text-xs tracking-widest">Havi Előfizetés</span>
+                    <span className="text-2xl font-black text-primary italic">1.490 Ft / hó</span>
+                  </div>
+                  <ul className="space-y-3 text-left">
+                    {["Végtelen étrend generálás", "AI hűtő felismerés extra tippekkel", "Minden új funkció elsőbbségi elérése"].map(feature => (
+                      <li key={feature} className="flex items-center gap-3 text-sm font-bold text-green-700">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Link 
+                  to="/profile"
+                  className="w-full h-16 bg-primary text-white rounded-2xl font-black shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
+                >
+                  <CreditCard size={24} />
+                  ELŐFIZETÉS MOST
+                </Link>
+                <p className="text-[10px] font-bold text-green-400 uppercase tracking-widest">Bármikor lemondható az áruházban</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

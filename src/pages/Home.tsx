@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Search, Filter, Clock, Flame, Heart } from "lucide-react";
+import { Search, Filter, Clock, Flame, Heart, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { Recipe } from "../types";
+import { useRecipes } from "../hooks/useRecipes";
 
 export const SAMPLE_RECIPES: Recipe[] = [
   {
@@ -50,41 +51,31 @@ export const SAMPLE_RECIPES: Recipe[] = [
       "Pároljuk meg a fokhagymát és a spenótot, amíg összeesik.",
       "Adjuk hozzá a tejszínt és a parmezánt, majd keverjük össze a tésztával."
     ]
-  },
-  {
-    id: "feta-salad",
-    name: "Kerti feta saláta",
-    description: "Vibráló mediterrán saláta koktélparadicsommal, uborkával, olajbogyóval és friss feta sajtkockákkal.",
-    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1974&auto=format&fit=crop",
-    time: "10 perc",
-    calories: 280,
-    difficulty: "Easy",
-    category: "Ebéd",
-    nutrients: { protein: "8g", carbs: "12g", fat: "22g" },
-    ingredients: [
-      { item: "Uborka", amount: "1 darab" },
-      { item: "Koktélparadicsom", amount: "150g" },
-      { item: "Feta sajt", amount: "100g" },
-      { item: "Olajbogyó", amount: "50g" }
-    ],
-    instructions: [
-      "Kockázzuk fel az uborkát és felezzük el a paradicsomokat.",
-      "Keverjük össze egy tálban az olajbogyóval.",
-      "Szórjuk meg morzsolt fetával és locsoljuk meg olívaolajjal."
-    ]
   }
 ];
 
 const CATEGORIES = ["Összes", "Reggeli", "Ebéd", "Vacsora", "Vegán", "Magas fehérje"];
 
 export default function Home() {
+  const { recipes: firestoreRecipes, loading } = useRecipes();
   const [selectedCategory, setSelectedCategory] = useState("Összes");
   const [search, setSearch] = useState("");
 
-  const filteredRecipes = SAMPLE_RECIPES.filter(r => 
+  const allRecipes = firestoreRecipes.length > 0 ? firestoreRecipes : SAMPLE_RECIPES;
+
+  const filteredRecipes = allRecipes.filter(r => 
     (selectedCategory === "Összes" || r.category === selectedCategory) &&
     r.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (loading && firestoreRecipes.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="animate-spin text-primary" size={48} />
+        <p className="text-green-600 font-bold italic">Ínycsiklandó falatok betöltése...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 pt-6 space-y-10 pb-20 max-w-6xl mx-auto">
@@ -119,25 +110,27 @@ export default function Home() {
       </section>
 
       {/* Featured Card */}
-      <Link to="/recipe/avocado-bowl">
-        <section className="relative overflow-hidden rounded-[32px] shadow-2xl group cursor-pointer aspect-[16/9] border-4 border-white/50">
-          <img 
-            src={SAMPLE_RECIPES[0].image} 
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-            alt="Featured"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-900/30 to-transparent flex flex-col justify-end p-10">
-            <div className="space-y-3">
-              <span className="bg-green-500 text-white text-[9px] font-black px-5 py-1.5 rounded-full uppercase tracking-[0.25em]">Séf ajánlata</span>
-              <h2 className="text-4xl font-black text-white leading-tight filter drop-shadow-lg">Avokádó Buddha Tál</h2>
-              <div className="flex items-center gap-6 text-white/90 text-xs font-bold uppercase tracking-widest">
-                <span className="flex items-center gap-2"><Clock size={16} /> 15 perc</span>
-                <span className="flex items-center gap-2 text-orange-400"><Flame size={16} /> 340 kcal</span>
+      {allRecipes.length > 0 && (
+        <Link to={`/recipe/${allRecipes[0].id}`}>
+          <section className="relative overflow-hidden rounded-[32px] shadow-2xl group cursor-pointer aspect-[16/9] border-4 border-white/50">
+            <img 
+              src={allRecipes[0].image} 
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+              alt="Featured"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-900/30 to-transparent flex flex-col justify-end p-10">
+              <div className="space-y-3">
+                <span className="bg-green-500 text-white text-[9px] font-black px-5 py-1.5 rounded-full uppercase tracking-[0.25em]">Séf ajánlata</span>
+                <h2 className="text-4xl font-black text-white leading-tight filter drop-shadow-lg">{allRecipes[0].name}</h2>
+                <div className="flex items-center gap-6 text-white/90 text-xs font-bold uppercase tracking-widest">
+                  <span className="flex items-center gap-2"><Clock size={16} /> {allRecipes[0].time}</span>
+                  <span className="flex items-center gap-2 text-orange-400"><Flame size={16} /> {allRecipes[0].calories} kcal</span>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </Link>
+          </section>
+        </Link>
+      )}
 
       {/* Recommended Grid */}
       <section className="space-y-8">

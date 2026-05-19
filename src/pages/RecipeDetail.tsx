@@ -1,12 +1,24 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Clock, Flame, Users, CheckCircle2, ChevronRight, ShoppingBasket } from "lucide-react";
+import { ArrowLeft, Clock, Flame, Users, CheckCircle2, ChevronRight, ShoppingBasket, Loader2 } from "lucide-react";
 import { SAMPLE_RECIPES } from "./Home";
 import { motion } from "motion/react";
+import { useRecipes } from "../hooks/useRecipes";
 
 export default function RecipeDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const recipe = SAMPLE_RECIPES.find(r => r.id === id);
+  const { recipes: firestoreRecipes, loading } = useRecipes();
+
+  const allRecipes = firestoreRecipes.length > 0 ? [...firestoreRecipes, ...SAMPLE_RECIPES] : SAMPLE_RECIPES;
+  const recipe = allRecipes.find(r => r.id === id);
+
+  if (loading && firestoreRecipes.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Loader2 className="animate-spin text-primary" size={48} />
+      </div>
+    );
+  }
 
   if (!recipe) return <div className="p-10 text-center font-black text-green-900">A recept nem található</div>;
 

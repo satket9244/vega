@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "Recipe": {
+      "title": "Recipe",
+      "description": "A vegetarian recipe with details.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "time": { "type": "string" },
+        "calories": { "type": "number" },
+        "difficulty": { "type": "string", "enum": ["Easy", "Medium", "Hard"] },
+        "category": { "type": "string" },
+        "nutrients": { "type": "object" },
+        "ingredients": { "type": "array" },
+        "instructions": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "description", "image", "time", "calories", "difficulty", "category", "ingredients", "instructions"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile tracking planner usage and subscription.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "plannerUseCount": { "type": "number" },
+        "isSubscribed": { "type": "boolean" },
+        "isAdmin": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "plannerUseCount", "isSubscribed"]
+    },
+    "AppConfig": {
+      "title": "AppConfig",
+      "description": "Global application configuration.",
+      "type": "object",
+      "properties": {
+        "subscriptionTerms": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/recipes/{recipeId}": {
+      "schema": "Recipe",
+      "description": "Collection of all recipes."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User specific data."
+    },
+    "/config/subscription": {
+      "schema": "AppConfig",
+      "description": "Subscription terms and info."
+    }
+  }
+}
