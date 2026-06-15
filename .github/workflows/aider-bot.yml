@@ -49,7 +49,7 @@ jobs:
           import os, json, urllib.request
 
           api_key = os.environ['NVIDIA_API_KEY']
-          base_url = "https://integrate.api.nvidia.com/v1/chat/completions"
+          base_url = "https://integrate.api.nvidia.com/v1"
           
           headers = {
               "Authorization": f"Bearer {api_key}",
@@ -57,7 +57,7 @@ jobs:
           }
 
           data = {
-              "model": "qwen/qwen3-coder-480b-a35b-instruct",
+              "model": "qwen/qwen2.5-coder-32b-instruct",
               "messages": [
                   {"role": "system", "content": os.getenv('SYSTEM_PROMPT_VAL', '')},
                   {"role": "user", "content": os.getenv('USER_REQUEST_VAL', '')}
@@ -128,7 +128,7 @@ jobs:
           export ISSUE_BODY="$ENHANCED_PROMPT"
           
           # Elindítjuk az Aidert PR módban (--auto-commit és --push automatikusan fut mögötte)
-          aider --model openai/qwen/qwen3-coder-480b-a35b-instruct \
+          aider --model qwen/qwen2.5-coder-32b-instruct \
                 --message "Here is the detailed task to implement: $ISSUE_BODY" \
                 --yes \
                 --commit \
